@@ -1,0 +1,19 @@
+image: maven:3.9.6-eclipse-temurin-21
+
+stages:
+  - build
+
+workflow:
+  rules:
+    - if: $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "main"
+
+build-job:
+  stage: build
+  tags:
+    - saas-linux-small-amd64
+  script:
+    - mvn -B -e -DskipTests=false package
+  artifacts:
+    paths:
+      - ./target/*.jar
+    expire_in: 1 week
