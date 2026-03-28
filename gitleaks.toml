@@ -1,0 +1,22 @@
+title = "Project-specific Gitleaks rules"
+
+[extend]
+useDefault = true
+
+[[rules]]
+id = "weak-password-assignment"
+description = "Detect hardcoded quoted password values that are too short or low-entropy for the default generic rule."
+regex = '''(?i)[\w.-]{0,50}?(?:passw(?:or)?d|passwd)(?:[ \t\w.-]{0,20})[\s'"]{0,3}(?:=|>|:{1,3}=|\|\||:|=>|\?=|,)[\x60'"\s=]{0,5}['"]([^'"\r\n]{6,64})['"]'''
+secretGroup = 1
+keywords = [
+  "passwd",
+  "password",
+]
+tags = ["password", "credential"]
+
+[[rules.allowlists]]
+description = "Ignore obvious placeholder passwords in examples and docs"
+regexTarget = "secret"
+regexes = [
+  '''(?i)^(?:changeme|dummy|example|none|null|passwd|password|password123|sample|secret|test)$''',
+]
